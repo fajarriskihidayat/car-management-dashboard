@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { CarsModel } from "../models/cars";
 
+const cloudinary = require("cloudinary").v2;
+
 const get = async (req: Request, res: Response) => {
   const getType = await CarsModel.query()
     .join("car_type", "cars.type_id", "car_type.id")
@@ -20,21 +22,42 @@ const get = async (req: Request, res: Response) => {
 
 const post = async (req: Request, res: Response) => {
   try {
-    const { type_id, brand_id, price, year, img_url } = req.body;
+    const { type_id, brand_id, price, year } = req.body;
 
-    if (!type_id || !brand_id || !price || !year || !img_url)
-      throw new Error("Data null");
+    if (!type_id || !brand_id || !price || !year) throw new Error("Data null");
 
-    const addType = await CarsModel.query()
-      .insert({ type_id, brand_id, price, year, img_url })
-      .returning("*");
+    //@ts-ignore
+    if (!req.file) {
+      throw new Error("No file uploaded");
+    }
 
-    res.status(201).json({
-      data: addType,
-      message: "Created car success",
+    //@ts-ignore
+    const filebase64 = req.file.buffer.toString("base64");
+    //@ts-ignore
+    const file = `data:${req.file.mimetype};base64,${filebase64}`;
+
+    //@ts-ignore
+    cloudinary.uploader.upload(file, async (err, result) => {
+      if (err) {
+        return res.status(400).json({
+          message: err.message,
+        });
+      }
+
+      const addType = await CarsModel.query()
+        .insert({ type_id, brand_id, price, year, img_url: result.url })
+        .returning("*");
+
+      res.status(201).json({
+        data: addType,
+        message: "Created car success",
+      });
     });
   } catch (error) {
-    res.status(401).json(error);
+    res.status(401).json({
+      //@ts-ignore
+      message: error.message,
+    });
   }
 };
 
@@ -57,24 +80,45 @@ const getById = async (req: Request, res: Response) => {
 
 const updateCars = async (req: Request, res: Response) => {
   try {
-    const { type_id, brand_id, price, year, img_url } = req.body;
+    const { type_id, brand_id, price, year } = req.body;
     const { id } = req.params;
 
-    if (!type_id || !brand_id || !price || !year || !img_url)
-      throw new Error("Data null");
+    if (!type_id || !brand_id || !price || !year) throw new Error("Data null");
 
-    const updateData = await CarsModel.query()
-      .where("id", "=", id)
-      .update({ type_id, brand_id, price, year, img_url });
+    //@ts-ignore
+    if (!req.file) {
+      throw new Error("No file uploaded");
+    }
 
-    res.status(200).json({
-      data: {
-        updated: updateData,
-      },
-      message: "Update car success",
+    //@ts-ignore
+    const filebase64 = req.file.buffer.toString("base64");
+    //@ts-ignore
+    const file = `data:${req.file.mimetype};base64,${filebase64}`;
+
+    //@ts-ignore
+    cloudinary.uploader.upload(file, async (err, result) => {
+      if (err) {
+        return res.status(400).json({
+          message: err.message,
+        });
+      }
+
+      const updateData = await CarsModel.query()
+        .where("id", "=", id)
+        .update({ type_id, brand_id, price, year, img_url: result.url });
+
+      res.status(200).json({
+        data: {
+          updated: updateData,
+        },
+        message: "Update car success",
+      });
     });
   } catch (error) {
-    res.status(404).json(error);
+    res.status(401).json({
+      //@ts-ignore
+      message: error.message,
+    });
   }
 };
 

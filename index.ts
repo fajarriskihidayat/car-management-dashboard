@@ -1,16 +1,16 @@
-import express, { Express, Request, Response } from "express";
 import knex from "knex";
 import { Model } from "objection";
 
-const PORT: Number = 3000;
-
+const express = require("express");
+const Express = require("express").Express;
 const carsRoute = require("./src/routes/carsRoute");
 const carTypeRoute = require("./src/routes/carTypeRoute");
 const carBrandRoute = require("./src/routes/carBrandRoute");
+const upload = require("./src/middleware/upload");
 
+//@ts-ignore
 const app: Express = express();
-app.use(express.json());
-
+const cloudinary = require("cloudinary").v2;
 const knexInstance = knex({
   client: "postgresql",
   connection: {
@@ -19,7 +19,18 @@ const knexInstance = knex({
     password: "fajar20",
   },
 });
+
+const PORT: number = 3000;
+
 Model.knex(knexInstance);
+cloudinary.config({
+  cloud_name: "dq5jhu4au",
+  api_key: "399692775172739",
+  api_secret: "0LU4oIx9GpAiofiE45nHWLBLMgY",
+});
+
+app.use(express.json());
+app.use(express.static("public"));
 
 app.use("/v1/cars/", carsRoute);
 app.use("/v1/cars/types", carTypeRoute);
