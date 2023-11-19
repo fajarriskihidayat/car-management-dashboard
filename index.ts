@@ -2,11 +2,9 @@ import knex from "knex";
 import { Model } from "objection";
 
 const express = require("express");
-const Express = require("express").Express;
 const carsRoute = require("./src/routes/carsRoute");
 const carTypeRoute = require("./src/routes/carTypeRoute");
 const carBrandRoute = require("./src/routes/carBrandRoute");
-const upload = require("./src/middleware/upload");
 
 //@ts-ignore
 const app: Express = express();
@@ -30,6 +28,7 @@ cloudinary.config({
 });
 
 app.use(express.json());
+// app.use(express.urlencoded());
 app.use(express.static("public"));
 
 app.use("/v1/cars/", carsRoute);

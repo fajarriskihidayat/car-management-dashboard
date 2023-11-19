@@ -1,13 +1,31 @@
 import { Request, Response } from "express";
-import { CarTypeModel } from "../models/carType";
+import CarTypeService from "../services/carTypes";
 
 const get = async (req: Request, res: Response) => {
-  const getType = await CarTypeModel.query();
+  const getType = await new CarTypeService().get();
 
   res.status(200).json({
     data: getType,
     message: "Get all type",
   });
+};
+
+const getById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    //@ts-ignore
+    const getTypeById = await new CarTypeService().getById(id);
+
+    res.status(200).json({
+      data: getTypeById,
+      message: "Get type by Id",
+    });
+  } catch (error) {
+    res.status(404).json({
+      message: "Type not found",
+    });
+  }
 };
 
 const post = async (req: Request, res: Response) => {
@@ -16,63 +34,30 @@ const post = async (req: Request, res: Response) => {
 
     if (!type) throw new Error("Data null");
 
-    const addType = await CarTypeModel.query()
-      .insert({ type: type })
-      .returning("*");
+    const addType = await new CarTypeService().post(type);
 
     res.status(201).json({
       data: addType,
       message: "Created type success",
     });
   } catch (error) {
-    res.status(401).json(error);
-  }
-};
-
-const getById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-
-    const getTypeById = await CarTypeModel.query()
-      .where("id", id)
-      .throwIfNotFound();
-
-    res.status(200).json({
-      data: getTypeById,
-      message: "Get type by Id",
+    res.status(400).json({
+      //@ts-ignore
+      message: error.message,
     });
-  } catch (error) {
-    res.status(401).json(error);
   }
 };
-
-const deleteType = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-
-    const deleteData = await CarTypeModel.query().where("id", id).del();
-
-    res.status(200).json({
-      data: {
-        deleted: deleteData,
-      },
-      message: "Delete type success",
-    });
-  } catch (error) {
-    res.status(404).json(error);
-  }
-};
-
 const updateType = async (req: Request, res: Response) => {
   try {
-    const { type } = req.body;
     const { id } = req.params;
+    const { type } = req.body;
 
     if (!type) throw new Error("Data null");
 
-    const updateData = await CarTypeModel.query()
-      .where("id", "=", id)
-      .update({ type });
+    //@ts-ignore
+    const updateData = await new CarTypeService().put(id, type);
+
+    if (updateData === 0) throw new Error("Type not found");
 
     res.status(200).json({
       data: {
@@ -81,7 +66,33 @@ const updateType = async (req: Request, res: Response) => {
       message: "Update type success",
     });
   } catch (error) {
-    res.status(404).json(error);
+    res.status(400).json({
+      //@ts-ignore
+      message: error.message,
+    });
+  }
+};
+
+const deleteType = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    //@ts-ignore
+    const deleteData = await new CarTypeService().delete(id);
+
+    if (deleteData === 0) throw new Error("Type not found");
+
+    res.status(200).json({
+      data: {
+        deleted: deleteData,
+      },
+      message: "Delete type success",
+    });
+  } catch (error) {
+    res.status(400).json({
+      //@ts-ignore
+      message: error.message,
+    });
   }
 };
 
