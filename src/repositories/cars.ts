@@ -25,7 +25,7 @@ export default class CarRepository {
   }
 
   async getById(id: number) {
-    return await CarsModel.query().where("id", id).throwIfNotFound();
+    return await CarsModel.query().findOne("id", id);
   }
 
   async post(param: Payload) {

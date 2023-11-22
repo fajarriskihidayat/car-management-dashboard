@@ -6,7 +6,7 @@ const get = async (req: Request, res: Response) => {
 
   res.status(200).json({
     data: getType,
-    message: "Get all type",
+    message: "Get all types",
   });
 };
 
@@ -15,16 +15,16 @@ const getById = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     //@ts-ignore
-    const getTypeById = await new CarTypeService().getById(id);
+    const type = await new CarTypeService().getById(id);
+    if (!type) return res.status(404).json({ message: "Type is not exist" });
 
     res.status(200).json({
-      data: getTypeById,
+      data: type,
       message: "Get type by Id",
     });
   } catch (error) {
-    res.status(404).json({
-      message: "Type not found",
-    });
+    //@ts-ignore
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -41,12 +41,11 @@ const post = async (req: Request, res: Response) => {
       message: "Created type success",
     });
   } catch (error) {
-    res.status(400).json({
-      //@ts-ignore
-      message: error.message,
-    });
+    //@ts-ignore
+    res.status(500).json({ message: error.message });
   }
 };
+
 const updateType = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -57,7 +56,9 @@ const updateType = async (req: Request, res: Response) => {
     //@ts-ignore
     const updateData = await new CarTypeService().put(id, type);
 
-    if (updateData === 0) throw new Error("Type not found");
+    if (updateData === 0) {
+      return res.status(404).json({ message: "Type is not exist" });
+    }
 
     res.status(200).json({
       data: {
@@ -66,10 +67,8 @@ const updateType = async (req: Request, res: Response) => {
       message: "Update type success",
     });
   } catch (error) {
-    res.status(400).json({
-      //@ts-ignore
-      message: error.message,
-    });
+    //@ts-ignore
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -80,7 +79,9 @@ const deleteType = async (req: Request, res: Response) => {
     //@ts-ignore
     const deleteData = await new CarTypeService().delete(id);
 
-    if (deleteData === 0) throw new Error("Type not found");
+    if (deleteData === 0) {
+      return res.status(404).json({ message: "Type is not exist" });
+    }
 
     res.status(200).json({
       data: {
@@ -89,10 +90,8 @@ const deleteType = async (req: Request, res: Response) => {
       message: "Delete type success",
     });
   } catch (error) {
-    res.status(400).json({
-      //@ts-ignore
-      message: error.message,
-    });
+    //@ts-ignore
+    res.status(500).json({ message: error.message });
   }
 };
 

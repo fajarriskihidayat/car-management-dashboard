@@ -11,30 +11,6 @@ export class CarsModel extends Model {
   static get tableName() {
     return "cars";
   }
-
-  static get relationMappings() {
-    const { CarTypeModel } = require("./carType");
-    const { CarBrandModel } = require("./carBrand");
-
-    return {
-      type: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: CarTypeModel,
-        join: {
-          from: "card.type_id",
-          to: "car_type.id",
-        },
-      },
-      brand: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: CarBrandModel,
-        join: {
-          from: "card.brand_id",
-          to: "car_brand.id",
-        },
-      },
-    };
-  }
 }
 
 export type Cars = ModelObject<CarsModel>;

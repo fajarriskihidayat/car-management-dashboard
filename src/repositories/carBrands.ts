@@ -6,7 +6,7 @@ export default class CarBrandRepository {
   }
 
   async getById(id: number) {
-    return await CarBrandModel.query().where("id", id).throwIfNotFound();
+    return await CarBrandModel.query().findOne("id", id);
   }
 
   async post(name: string) {

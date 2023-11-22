@@ -6,7 +6,7 @@ export default class CarTypeRepository {
   }
 
   async getById(id: number) {
-    return await CarTypeModel.query().where("id", id).throwIfNotFound();
+    return await CarTypeModel.query().findOne("id", id);
   }
 
   async post(type: string) {

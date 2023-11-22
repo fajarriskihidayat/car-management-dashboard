@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 const carsController = require("../controllers/carsController");
 const upload = require("../middleware/upload");
