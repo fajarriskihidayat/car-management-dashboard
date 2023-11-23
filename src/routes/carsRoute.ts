@@ -9,8 +9,12 @@ const isAdminOrSuperAdmin = require("../middleware/isAdminOrSuperAdmin");
 router.use(isAdminOrSuperAdmin);
 router.get("/", carsController.get);
 router.get("/:id", carsController.getById);
-router.post("/", upload.single("picture"), carsController.post);
-router.put("/:id", upload.single("picture"), carsController.updateCars);
-router.delete("/:id", carsController.deleteCars);
+router.post("/:user_id", upload.single("picture"), carsController.post);
+router.put(
+  "/:user_id/:id",
+  upload.single("picture"),
+  carsController.updateCars
+);
+router.delete("/:user_id/:id", carsController.deleteCars);
 
 module.exports = router;

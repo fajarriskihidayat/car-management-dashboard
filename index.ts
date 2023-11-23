@@ -7,6 +7,7 @@ const carTypeRoute = require("./src/routes/carTypeRoute");
 const carBrandRoute = require("./src/routes/carBrandRoute");
 const usersRoute = require("./src/routes/usersRoute");
 const rolesRoute = require("./src/routes/rolesRoute");
+const logActivitiesRoute = require("./src/routes/logActivitiesRoute");
 
 //@ts-ignore
 const app: Express = express();
@@ -38,6 +39,7 @@ app.use("/v1/cars/types", carTypeRoute);
 app.use("/v1/cars/brands", carBrandRoute);
 app.use("/v1/users", usersRoute);
 app.use("/v1/roles", rolesRoute);
+app.use("/v1/log-activities", logActivitiesRoute);
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);

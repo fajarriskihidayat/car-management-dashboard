@@ -1,6 +1,7 @@
 import CarRepository from "../repositories/cars";
 
 interface Payload {
+  name: string;
   type_id: number;
   brand_id: number;
   price: number;

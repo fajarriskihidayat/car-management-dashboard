@@ -1,6 +1,7 @@
 import { CarsModel } from "../models/cars";
 
 interface Payload {
+  name: string;
   type_id: number;
   brand_id: number;
   price: number;
@@ -31,23 +32,13 @@ export default class CarRepository {
   async post(param: Payload) {
     const { type_id, brand_id, price, year, img_url } = param;
 
-    return await CarsModel.query()
-      .insert({
-        type_id,
-        brand_id,
-        price,
-        year,
-        img_url,
-      })
-      .returning("*");
+    return await CarsModel.query().insert(param).returning("*");
   }
 
   async put(id: number, param: Payload) {
-    const { type_id, brand_id, price, year, img_url } = param;
+    // const { type_id, brand_id, price, year, img_url } = param;
 
-    return await CarsModel.query()
-      .where("id", "=", id)
-      .update({ type_id, brand_id, price, year, img_url });
+    return await CarsModel.query().where("id", "=", id).update(param);
   }
 
   async delete(id: number) {

@@ -2,6 +2,7 @@ import { Model, ModelObject } from "objection";
 
 export class CarsModel extends Model {
   id!: number;
+  name!: string;
   type_id!: number;
   brand_id!: number;
   price!: number;
