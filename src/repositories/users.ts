@@ -12,6 +12,32 @@ export default class UserRepository {
   }
 
   async getByEmail(email: string) {
-    return await UserModel.query().findOne("email", email);
+    return await UserModel.query()
+      .findOne("users.email", email)
+      .join("roles", "users.role_id", "roles.id")
+      .select(
+        "users.id",
+        "users.name",
+        "users.email",
+        "users.password",
+        "roles.role as role"
+      );
+  }
+
+  async getById(id: number) {
+    return await UserModel.query()
+      .findOne("users.id", id)
+      .join("roles", "users.role_id", "roles.id")
+      .select(
+        "users.id",
+        "users.name",
+        "users.email",
+        "users.password",
+        "roles.role as role"
+      );
+  }
+
+  async put(id: number) {
+    return await UserModel.query().where("id", "=", id).update({ role_id: 2 });
   }
 }

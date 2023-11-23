@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import CarTypeService from "../services/carTypes";
+import RolesService from "../services/roles";
 
 const get = async (req: Request, res: Response) => {
-  const getType = await new CarTypeService().get();
+  const getRoles = await new RolesService().get();
 
   res.status(200).json({
-    message: "Get all types",
-    data: getType,
+    message: "Get all roles",
+    data: getRoles,
   });
 };
 
@@ -15,12 +15,12 @@ const getById = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     //@ts-ignore
-    const type = await new CarTypeService().getById(id);
-    if (!type) return res.status(404).json({ message: "Type is not exist" });
+    const role = await new RolesService().getById(id);
+    if (!role) return res.status(404).json({ message: "Role is not exist" });
 
     res.status(200).json({
-      message: "Get type by Id",
-      data: type,
+      message: "Get role by Id",
+      data: role,
     });
   } catch (error) {
     //@ts-ignore
@@ -30,15 +30,15 @@ const getById = async (req: Request, res: Response) => {
 
 const post = async (req: Request, res: Response) => {
   try {
-    const { type } = req.body;
+    const { role } = req.body;
 
-    if (!type) throw new Error("Data null");
+    if (!role) return res.status(400).json({ message: "Data null" });
 
-    const addType = await new CarTypeService().post(type);
+    const addRole = await new RolesService().post(role);
 
     res.status(201).json({
-      message: "Created type success",
-      data: addType,
+      message: "Created role success",
+      data: addRole,
     });
   } catch (error) {
     //@ts-ignore
@@ -46,22 +46,22 @@ const post = async (req: Request, res: Response) => {
   }
 };
 
-const updateType = async (req: Request, res: Response) => {
+const updateRole = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { type } = req.body;
+    const { role } = req.body;
 
-    if (!type) throw new Error("Data null");
+    if (!role) return res.status(400).json({ message: "Data null" });
 
     //@ts-ignore
-    const updateData = await new CarTypeService().put(id, type);
+    const updateData = await new RolesService().put(id, role);
 
     if (updateData === 0) {
-      return res.status(404).json({ message: "Type is not exist" });
+      return res.status(404).json({ message: "Role is not exist" });
     }
 
     res.status(200).json({
-      message: "Update type success",
+      message: "Update role success",
       data: {
         updated: updateData,
       },
@@ -72,19 +72,19 @@ const updateType = async (req: Request, res: Response) => {
   }
 };
 
-const deleteType = async (req: Request, res: Response) => {
+const deleteRole = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
     //@ts-ignore
-    const deleteData = await new CarTypeService().delete(id);
+    const deleteData = await new RolesService().delete(id);
 
     if (deleteData === 0) {
-      return res.status(404).json({ message: "Type is not exist" });
+      return res.status(404).json({ message: "Role is not exist" });
     }
 
     res.status(200).json({
-      message: "Delete type success",
+      message: "Delete role success",
       data: {
         deleted: deleteData,
       },
@@ -99,6 +99,6 @@ module.exports = {
   get,
   getById,
   post,
-  deleteType,
-  updateType,
+  deleteRole,
+  updateRole,
 };

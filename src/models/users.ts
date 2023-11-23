@@ -4,14 +4,14 @@ export class UserModel extends Model {
   name!: string;
   email!: string;
   password!: string;
-  role!: string;
+  role_id!: number;
 
   static get tableName() {
     return "users";
   }
 
   $beforeInsert() {
-    this.role = this.role || "member";
+    this.role_id = this.role_id || 3;
   }
 }
 

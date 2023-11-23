@@ -20,4 +20,12 @@ export default class UserService {
   async getByEmail(email: string) {
     return await this.#userRepository.getByEmail(email);
   }
+
+  async getById(id: number) {
+    return await this.#userRepository.getById(id);
+  }
+
+  async put(id: number) {
+    return await this.#userRepository.put(id);
+  }
 }

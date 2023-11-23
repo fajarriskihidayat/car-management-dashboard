@@ -7,8 +7,8 @@ const get = async (req: Request, res: Response) => {
   const cars = await new CarService().get();
 
   res.status(200).json({
-    data: cars,
     message: "Get all Cars",
+    data: cars,
   });
 };
 
@@ -21,8 +21,8 @@ const getById = async (req: Request, res: Response) => {
     if (!car) return res.status(404).json({ message: "User is not exist" });
 
     res.status(200).json({
+      message: "Get car by Id",
       data: car,
-      message: "Get cars by Id",
     });
   } catch (error) {
     //@ts-ignore
@@ -39,7 +39,7 @@ const post = async (req: Request, res: Response) => {
     }
 
     //@ts-ignore
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+    // if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
     //@ts-ignore
     const filebase64 = req.file.buffer.toString("base64");
@@ -60,8 +60,8 @@ const post = async (req: Request, res: Response) => {
       });
 
       res.status(201).json({
-        data: addType,
         message: "Created car success",
+        data: addType,
       });
     });
   } catch (error) {
@@ -105,10 +105,10 @@ const updateCars = async (req: Request, res: Response) => {
       }
 
       res.status(200).json({
+        message: "Update car success",
         data: {
           updated: updateData,
         },
-        message: "Update car success",
       });
     });
   } catch (error) {
@@ -129,10 +129,10 @@ const deleteCars = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({
+      message: "Delete car success",
       data: {
         deleted: deleteData,
       },
-      message: "Delete car success",
     });
   } catch (error) {
     //@ts-ignore
