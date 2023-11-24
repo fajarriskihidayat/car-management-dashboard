@@ -1,48 +1,74 @@
 import { Request, Response } from "express";
-import { CarBrandModel } from "../models/carBrand";
+import CarBrandService from "../services/carBrands";
 
 const get = async (req: Request, res: Response) => {
-  const getType = await CarBrandModel.query();
+  const getBrands = await new CarBrandService().get();
 
   res.status(200).json({
-    data: getType,
-    message: "Get all name",
+    message: "Get all brands",
+    data: getBrands,
   });
-};
-
-const post = async (req: Request, res: Response) => {
-  try {
-    const { name } = req.body;
-
-    if (!name) throw new Error("Data null");
-
-    const addType = await CarBrandModel.query()
-      .insert({ name: name })
-      .returning("*");
-
-    res.status(201).json({
-      data: addType,
-      message: "Created name success",
-    });
-  } catch (error) {
-    res.status(401).json(error);
-  }
 };
 
 const getById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const getTypeById = await CarBrandModel.query()
-      .where("id", id)
-      .throwIfNotFound();
+    //@ts-ignore
+    const brand = await new CarBrandService().getById(id);
+    if (!brand) return res.status(404).json({ message: "Brand is not exist" });
 
     res.status(200).json({
-      data: getTypeById,
-      message: "Get name by Id",
+      message: "Get brand by Id",
+      data: brand,
     });
   } catch (error) {
-    res.status(401).json(error);
+    //@ts-ignore
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const post = async (req: Request, res: Response) => {
+  try {
+    const { name } = req.body;
+
+    if (!name) return res.status(400).json({ message: "Data null" });
+
+    const addBrand = await new CarBrandService().post(name);
+
+    res.status(201).json({
+      message: "Created brand success",
+      data: addBrand,
+    });
+  } catch (error) {
+    //@ts-ignore
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateBrand = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    if (!name) return res.status(400).json({ message: "Data null" });
+
+    //@ts-ignore
+    const updateData = await new CarBrandService().put(id, name);
+
+    if (updateData === 0) {
+      return res.status(404).json({ message: "Brand is not exist" });
+    }
+
+    res.status(200).json({
+      message: "Update brand success",
+      data: {
+        updated: updateData,
+      },
+    });
+  } catch (error) {
+    //@ts-ignore
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -50,36 +76,22 @@ const deleteBrand = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const deleteData = await CarBrandModel.query().where("id", id).del();
+    //@ts-ignore
+    const deleteData = await new CarBrandService().delete(id);
+
+    if (deleteData === 0) {
+      return res.status(404).json({ message: "Brand is not exist" });
+    }
 
     res.status(200).json({
+      message: "Delete brand success",
       data: {
         deleted: deleteData,
       },
-      message: "Delete name success",
     });
   } catch (error) {
-    res.status(404).json(error);
-  }
-};
-
-const updateBrand = async (req: Request, res: Response) => {
-  try {
-    const { name } = req.body;
-    const { id } = req.params;
-
-    const updateData = await CarBrandModel.query()
-      .where("id", "=", id)
-      .update({ name });
-
-    res.status(200).json({
-      data: {
-        updated: updateData,
-      },
-      message: "Update name success",
-    });
-  } catch (error) {
-    res.status(404).json(error);
+    //@ts-ignore
+    res.status(500).json({ message: error.message });
   }
 };
 

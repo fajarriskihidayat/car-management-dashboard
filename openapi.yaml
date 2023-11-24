@@ -1,0 +1,277 @@
+openapi: 3.0.0
+info:
+  title: Car Management Dashboard APIs
+  version: 1.0.0.
+paths:
+  /v1/cars:
+    get:
+      tags:
+        - Get
+      security:
+        - bearerToken: []
+      responses:
+        "200":
+          $ref: "#/components/responses/GetResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedResponse"
+  /v1/cars/{user_id}:
+    post:
+      operationId: createPost
+      tags:
+        - Post
+      parameters:
+        - in: path
+          name: user_id
+          description: The user_id of the Post
+          required: true
+          schema:
+            type: number
+            example: 1
+      security:
+        - bearerToken: []
+      requestBody:
+        $ref: "#/components/requestBodies/PostRequest"
+      responses:
+        "201":
+          $ref: "#/components/responses/PostResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedResponse"
+  /v1/cars/{user_id}/{id}:
+    put:
+      operationId: updatePut
+      tags:
+        - Put
+      parameters:
+        - in: path
+          name: user_id
+          description: The user_id of the Put
+          required: true
+          schema:
+            type: number
+            example: 1
+        - in: path
+          name: id
+          description: The id of the Put
+          required: true
+          schema:
+            type: number
+            example: 5
+      requestBody:
+        $ref: "#/components/requestBodies/PutRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/PutResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedResponse"
+    delete:
+      operationId: delete
+      tags:
+        - Delete
+      parameters:
+        - in: path
+          name: user_id
+          description: The user_id of the Put
+          required: true
+          schema:
+            type: number
+            example: 1
+        - in: path
+          name: id
+          description: The id of the Put
+          required: true
+          schema:
+            type: number
+            example: 5
+      security:
+        - bearerToken: []
+      responses:
+        "201":
+          $ref: "#/components/responses/DeleteResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedResponse"
+
+components:
+  securitySchemes:
+    bearerToken:
+      name: "Authorization"
+      type: http
+      scheme: "bearer"
+      bearerFormat: JWT
+  requestBodies:
+    PostRequest:
+      description: Payload for making a Post
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Navara
+              type_id:
+                type: number
+                example: 2
+              brand_id:
+                type: number
+                example: 6
+              price:
+                type: number
+                example: 200000
+              year:
+                type: string
+                example: 2021
+              picture:
+                type: string
+                format: binary
+          encoding:
+            picture:
+              contentType: application/octet-stream
+        required: true
+    PutRequest:
+      description: Payload for making a Put
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Pickup
+              type_id:
+                type: number
+                example: 2
+              brand_id:
+                type: number
+                example: 6
+              price:
+                type: number
+                example: 300000
+              year:
+                type: string
+                example: 2017
+              picture:
+                type: string
+                format: binary
+          encoding:
+            picture:
+              contentType: application/octet-stream
+        required: true
+  responses:
+    ForbiddenResponse:
+      description: Response when accessing protected endpoint with access but sufficient access
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: FAIL
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "FORBIDDEN"
+                  message:
+                    type: string
+                    example: "Invalid access level"
+    UnauthorizedResponse:
+      description: Response when accessing protected endpoint without access
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthorized
+    GetResponse:
+      description: Response when mutating and get.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Get all cars
+              data:
+                $ref: "#/components/schemas/Get"
+    PostResponse:
+      description: Response when mutating and get individual Post.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Created car success
+              data:
+                $ref: "#/components/schemas/Get"
+    PutResponse:
+      description: Response when mutating and get individual Put.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Update car success
+              data:
+                $ref: "#/components/schemas/Put"
+    DeleteResponse:
+      description: Response when mutating and get individual Put.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Delete car success
+              data:
+                $ref: "#/components/schemas/Delete"
+  schemas:
+    Get:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Brio
+        car_type:
+          type: string
+          example: small
+        brand_name:
+          type: string
+          example: Honda
+        price:
+          type: number
+          example: 200000
+        year:
+          type: string
+          example: 2021
+        img_url:
+          type: string
+          example: http://res.cloudinary.com/dq5jhu4au/image/upload/v1700780161/x14xxlqq9mst0zk4rte7.png
+    Put:
+      type: object
+      properties:
+        updated:
+          type: number
+          example: 1
+    Delete:
+      type: object
+      properties:
+        deleted:
+          type: number
+          example: 1
+
+security:
+  - bearerToken: []
