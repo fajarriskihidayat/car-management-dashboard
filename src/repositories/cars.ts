@@ -16,6 +16,7 @@ export default class CarRepository {
       .join("car_brand", "cars.brand_id", "car_brand.id")
       .select(
         "cars.id",
+        "cars.name",
         "car_type.type as car_type",
         "car_brand.name as brand_name",
         "cars.price",

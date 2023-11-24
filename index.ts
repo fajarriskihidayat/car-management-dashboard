@@ -2,6 +2,9 @@ import knex from "knex";
 import { Model } from "objection";
 
 const express = require("express");
+const YAML = require("yamljs");
+const swaggerUi = require("swagger-ui-express");
+
 const carsRoute = require("./src/routes/carsRoute");
 const carTypeRoute = require("./src/routes/carTypeRoute");
 const carBrandRoute = require("./src/routes/carBrandRoute");
@@ -11,6 +14,8 @@ const logActivitiesRoute = require("./src/routes/logActivitiesRoute");
 
 //@ts-ignore
 const app: Express = express();
+const swaggerDocument = YAML.load("./openapi.yaml");
+
 const cloudinary = require("cloudinary").v2;
 const knexInstance = knex({
   client: "postgresql",
@@ -34,6 +39,7 @@ app.use(express.json());
 // app.use(express.urlencoded());
 app.use(express.static("public"));
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/v1/cars/", carsRoute);
 app.use("/v1/cars/types", carTypeRoute);
 app.use("/v1/cars/brands", carBrandRoute);

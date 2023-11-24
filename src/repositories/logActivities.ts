@@ -17,7 +17,8 @@ export default class LogActivitiesRepo {
         "users.email as user_email",
         "cars.name as car_name",
         "log_activities.created_at"
-      );
+      )
+      .orderBy("log_activities.id", "desc");
   }
 
   async post(param: Payload) {
