@@ -1,0 +1,25 @@
+#hero {
+  margin-top: 37px;
+  margin-bottom: 100px;
+}
+
+#hero .left {
+  width: 568px;
+  margin-left: 136px;
+  margin-right: 32px;
+}
+
+#hero .left h1 {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+#hero .left p {
+  width: 460px;
+  font-size: 14px;
+}
+
+#hero .right img {
+  width: 704px;
+  height: 407px;
+}

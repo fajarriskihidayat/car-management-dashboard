@@ -1,0 +1,34 @@
+#our-service {
+  margin-bottom: 100px;
+}
+
+#our-services .left img {
+  width: 459px;
+  height: 428px;
+}
+
+#our-services .right {
+  width: 468px;
+}
+
+#our-services .right h1 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 36px;
+  margin-bottom: 24px;
+}
+
+#our-services .right p {
+  font-size: 14px;
+}
+
+#our-services .right .list {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+#our-services .right .list span {
+  margin-left: 16px;
+  font-size: 14px;
+}

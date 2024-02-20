@@ -1,0 +1,60 @@
+#testimonial {
+  flex-direction: column;
+  margin-bottom: 100px;
+}
+
+#testimonial h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+#testimonial span {
+  font-size: 14px;
+}
+
+#testimonial .card {
+  width: 1921px;
+  margin-top: 40px;
+  margin-left: -241px;
+}
+
+#testimonial .card-item {
+  background-color: #f1f3ff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 270px;
+  padding: 0 46px;
+}
+
+#testimonial .card p {
+  font-size: 14px;
+  margin: 0;
+  padding: 8px 0;
+}
+
+#testimonial .card span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+}
+
+#testimonial .arrow .bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 100px;
+  padding: 6;
+  font-size: 20px;
+}
+
+#testimonial .arrow .prev {
+  border: 1px solid #c4c4c4;
+}
+
+#testimonial .arrow .next {
+  background-color: #5cb85f;
+}

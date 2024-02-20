@@ -1,0 +1,23 @@
+header {
+  padding-top: 24px;
+}
+
+.box {
+  width: 100px;
+  height: 34px;
+  background-color: #0d28a6;
+}
+
+nav .nav-link {
+  color: #000;
+  margin-right: 1rem;
+  font-size: 14px;
+  padding: 0;
+}
+
+nav .btn,
+#hero .btn,
+#banner .btn {
+  background-color: #5cb85f;
+  font-size: 14px;
+}
